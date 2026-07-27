@@ -1,3 +1,37 @@
+# Differential-Drive Mobile Robot — ROS 2 Simulation & LiDAR Integration
+
+A simulated differential-drive mobile robot built for **ROS 2 Jazzy** and **Gazebo Harmonic**.
+The robot is modeled in URDF/Xacro, driven through the `ros_gz` bridge, and equipped with a
+360° LiDAR whose scans are correctly localized to the robot via the TF transform tree.
+Controlled in real time with keyboard teleoperation.
+
+![Robot in Gazebo](docs/gazebo.png)
+<!-- replace with your own screenshot: robot + obstacles in Gazebo -->
+
+## Overview
+
+This project implements the full simulation stack for a two-wheeled mobile robot:
+mechanical model → physics simulation → sensor integration → teleoperation. It was built
+as a from-scratch exercise in ROS 2 middleware, the modern Gazebo (`gz-sim`) plugin system,
+and coordinate-frame (TF) management — the foundations of any mobile-robot software stack.
+
+**Stack:** ROS 2 Jazzy · Gazebo Harmonic · URDF/Xacro · `ros_gz_bridge` · RViz2 · Ubuntu 24.04
+
+## Features
+
+- **Parametric robot model** — chassis, two drive wheels, caster, and LiDAR mast defined in
+  Xacro with reusable macros for links and inertia tensors (box, cylinder, sphere).
+- **Differential-drive control** — the `gz-sim-diff-drive-system` plugin converts velocity
+  commands into per-wheel motion and publishes wheel odometry.
+- **LiDAR perception** — a 360° `gpu_lidar` sensor publishes range scans, frame-stamped to
+  the `lidar_link` so they resolve correctly in the TF tree.
+- **TF transform tree** — `robot_state_publisher` and the drive plugin jointly build
+  `odom → base_footprint → base_link → {wheels, lidar_link}`, letting scans be placed in
+  the world frame as the robot moves.
+- **ROS ↔ Gazebo bridge** — `/cmd_vel`, `/odom`, `/tf`, `/joint_states`, `/scan`, and `/clock`
+  bridged between ROS 2 and Gazebo.
+- **Keyboard teleoperation** — drive the robot live via `teleop_twist_keyboard`.
+
 ## Requirements
 
 - Ubuntu 24.04
