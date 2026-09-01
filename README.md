@@ -13,7 +13,7 @@ Controlled in real time with keyboard teleoperation.
 This project implements the full simulation stack for a two-wheeled mobile robot:
 mechanical model → physics simulation → sensor integration → teleoperation. It was built
 as a from-scratch exercise in ROS 2 middleware, the modern Gazebo (`gz-sim`) plugin system,
-and coordinate-frame (TF) management — the foundations of any mobile-robot software stack.
+and coordinate-frame (TF) management, the foundations of any mobile-robot software stack.
 
 **Stack:** ROS 2 Jazzy · Gazebo Harmonic · URDF/Xacro · `ros_gz_bridge` · RViz2 · Ubuntu 24.04
 
@@ -71,7 +71,7 @@ Use `i / j / k / l / ,` to move and `q / z` to change speed (keep that terminal 
 
 Launch RViz2, set **Fixed Frame** to `odom`, and add **RobotModel** (`/robot_description`),
 **TF**, and **LaserScan** (`/scan`) displays. The scan points trace the obstacles and follow
-the robot as you drive — confirming the sensor is correctly integrated through TF.
+the robot as you drive, confirming the sensor is correctly integrated through TF.
 
 ![RViz laser scan](docs/rviz.png)
 <!-- replace with your own screenshot: RViz showing the laser scan -->
@@ -80,17 +80,17 @@ the robot as you drive — confirming the sensor is correctly integrated through
 
 **Teleoperation → motion.** `teleop_twist_keyboard` publishes `geometry_msgs/Twist` (linear +
 angular velocity) on `/cmd_vel`. The bridge forwards it to Gazebo, where the differential-drive
-plugin solves the drive kinematics into left/right wheel speeds — you command a velocity, the
+plugin solves the drive kinematics into left/right wheel speeds, you command a velocity, the
 plugin handles the wheels.
 
 **TF transform tree.** `robot_state_publisher` reads the URDF and live wheel angles (from
 `/joint_states`) to publish the robot's internal frames; the drive plugin publishes
-`odom → base_footprint`. Chained, every part of the robot — and every LiDAR scan — has a known
+`odom → base_footprint`. Chained, every part of the robot, and every LiDAR scan — has a known
 position in the world frame.
 
 **LiDAR via TF.** Each scan is stamped with `frame_id = lidar_link`. Because TF knows where
 `lidar_link` sits relative to the robot and the world, the scan data is placed correctly in
-space as the robot drives — the basis for mapping and navigation.
+space as the robot drives, the basis for mapping and navigation.
 
 ## Roadmap
 
